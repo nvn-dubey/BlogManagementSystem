@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Blog Management System</h1>
+
+<div class="card">
+    <h2>Create Blog</h2>
+    <form id="createForm">
+        <input type="text" id="title" placeholder="Title" required>
+        <textarea id="content" placeholder="Content" required></textarea>
+        <input type="file" id="image">
+        <button type="submit">Create Blog</button>
+    </form>
+</div>
+
+<div class="card hidden" id="editCard">
+    <h2>Edit Blog</h2>
+    <form id="editForm">
+        <input type="hidden" id="editId">
+        <input type="text" id="editTitle" required>
+        <textarea id="editContent" required></textarea>
+        <input type="file" id="editImage">
+        <button type="submit">Update Blog</button>
+    </form>
+</div>
+
+<h2>All Blogs</h2>
+<div id="blogs"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
