@@ -17,7 +17,6 @@ public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
-    // Absolute upload path (already created)
     private static final String UPLOAD_DIR = "C:/blog_uploads/";
 
     // CREATE BLOG
@@ -28,16 +27,13 @@ public class BlogService {
         blog.setContent(content);
 
         if (image != null && !image.isEmpty()) {
-
             File uploadDir = new File(UPLOAD_DIR);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
+            if (!uploadDir.exists()) uploadDir.mkdirs();
 
             String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
-            File destinationFile = new File(uploadDir, imageName);
+            File dest = new File(uploadDir, imageName);
+            image.transferTo(dest);
 
-            image.transferTo(destinationFile);
             blog.setImageName(imageName);
         }
 
@@ -51,7 +47,29 @@ public class BlogService {
 
     // GET BLOG BY ID
     public Blog getBlogById(Long id) {
-        return blogRepository.findById(id).orElse(null);
+        return blogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
+    }
+
+    // UPDATE BLOG
+    public Blog updateBlog(Long id, String title, String content, MultipartFile image) throws IOException {
+
+        Blog blog = getBlogById(id);
+        blog.setTitle(title);
+        blog.setContent(content);
+
+        if (image != null && !image.isEmpty()) {
+            File uploadDir = new File(UPLOAD_DIR);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
+
+            String imageName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+            File dest = new File(uploadDir, imageName);
+            image.transferTo(dest);
+
+            blog.setImageName(imageName);
+        }
+
+        return blogRepository.save(blog);
     }
 
     // DELETE BLOG
